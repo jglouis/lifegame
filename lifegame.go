@@ -41,19 +41,17 @@ func (b Board) SetAt(c Coord, toSet bool) {
 	}
 }
 
-// Get the cell state at given coordinates.
+// GetAt Get the cell state at given coordinates.
 func (b Board) GetAt(c Coord) bool {
 	value, ok := b[c]
 	return ok && value
 }
 
-// AddGeometry adds a given geometry to the board.
-// Returns false if the geometry doesn't fit on the board.
-func (b Board) AddGeometry(pattern Pattern) bool {
+// AddPattern adds a given geometry to the board.
+func (b Board) AddPattern(pattern Pattern) {
 	for coord := range pattern {
 		b.SetAt(coord, true)
 	}
-	return true
 }
 
 // GetBoundaries gets the current boundaries of the map.
@@ -75,7 +73,7 @@ func (b Board) GetBoundaries() (minX, minY, maxX, maxY int) {
 	return
 }
 
-// Get a string representation of the Board state.
+// String returns a string representation of the Board state.
 func (b Board) String() string {
 	// Get the current boundaries of the map.
 	minX, minY, maxX, maxY := b.GetBoundaries()

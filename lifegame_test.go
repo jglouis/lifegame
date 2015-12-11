@@ -18,10 +18,7 @@ func TestOscillators(t *testing.T) {
 
 	for name, pattern := range patterns {
 		board := New()
-		if !board.AddGeometry(pattern) {
-			t.Error("Board is to small for the", name, "pattern.")
-			continue
-		}
+		board.AddPattern(pattern)
 
 		for i := 0; i < periodByPattern[name]; i++ {
 			board.Tick()
@@ -54,10 +51,8 @@ func TestStillLifes(t *testing.T) {
 
 	for name, pattern := range patterns {
 		board := New()
-		if !board.AddGeometry(pattern) {
-			t.Error("Board is to small for the", name, "pattern.")
-			continue
-		}
+		board.AddPattern(pattern)
+
 		board.Tick()
 
 		for i := 0; i < len(board); i++ {
