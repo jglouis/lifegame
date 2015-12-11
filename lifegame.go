@@ -8,7 +8,7 @@ type Coord struct {
 // Pattern is a slice of Coord.
 type Pattern []Coord
 
-// Board is a two dimensional boolean grid.
+// Board is a two dimensional squared boolean grid.
 type Board [][]bool
 
 // New creates a new zeroed instance of board.
