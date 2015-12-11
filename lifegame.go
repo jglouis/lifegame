@@ -28,19 +28,17 @@ func New() Board {
 // Set the Board cell at the given coordinates.
 func (b Board) SetAt(c Coord, toSet bool) {
 	b[c] = toSet
-	// Also sets the adjacents coordinates
-	x := c.X
-	y := c.Y
-	for i := x - 1; i <= x+1; i++ {
-		for j := y - 1; j <= y+1; j++ {
-			if x == i && y == j {
-				continue
+	if toSet {
+		// If set to true, then add the adjacent coordinates to the map.
+		x := c.X
+		y := c.Y
+		for i := x - 1; i <= x+1; i++ {
+			for j := y - 1; j <= y+1; j++ {
+				adjCoord := Coord{i, j}
+				b[adjCoord] = b.GetAt(adjCoord)
 			}
-			coordAdj := Coord{i, j}
-			b[coordAdj] = b.GetAt(coordAdj)
 		}
 	}
-
 }
 
 // Get the cell state at given coordinates.
@@ -58,10 +56,8 @@ func (b Board) AddGeometry(pattern Pattern) bool {
 	return true
 }
 
-// Get a string representation of the Board state.
-func (b Board) String() string {
-	// Get the current boundaries of the map.
-	var minX, minY, maxX, maxY int
+// GetBoundaries gets the current boundaries of the map.
+func (b Board) GetBoundaries() (minX, minY, maxX, maxY int) {
 	for coord := range b {
 		if coord.X < minX {
 			minX = coord.X
@@ -76,6 +72,13 @@ func (b Board) String() string {
 			maxY = coord.Y
 		}
 	}
+	return
+}
+
+// Get a string representation of the Board state.
+func (b Board) String() string {
+	// Get the current boundaries of the map.
+	minX, minY, maxX, maxY := b.GetBoundaries()
 
 	str := ""
 	for i := minX; i <= maxX; i++ {
@@ -107,10 +110,9 @@ func (b Board) Tick() {
 			b.SetAt(coord, adj_alife == 3)
 		}
 	}
-
 }
 
-// Counts the number of adjacent cells with the given state.
+// CountAdjacentCells Counts the number of adjacent cells with the given state.
 func (b Board) CountAdjacentCells(x, y int, state bool) int {
 	count := 0
 	for i := x - 1; i <= x+1; i++ {
@@ -121,7 +123,6 @@ func (b Board) CountAdjacentCells(x, y int, state bool) int {
 			if b.GetAt(Coord{i, j}) == state {
 				count++
 			}
-
 		}
 	}
 	return count
