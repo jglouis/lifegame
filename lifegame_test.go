@@ -2,7 +2,7 @@ package lifegame
 
 import "testing"
 
-func TestOscillator(t *testing.T) {
+func TestOscillators(t *testing.T) {
 	// Oscillators patterns
 	blinker := NewPattern(Coord{1, 0}, Coord{1, 1}, Coord{1, 2})
 	toad := NewPattern(Coord{1, 1}, Coord{1, 2}, Coord{1, 3}, Coord{2, 0}, Coord{2, 1}, Coord{2, 2})

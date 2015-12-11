@@ -73,29 +73,24 @@ func (b Board) String() string {
 
 // Tick computes the next state of the game of life.
 func (b Board) Tick() {
-	// for each cell:
-	newBoard := New(len(b))
+	// Copy the old state.
+	oldBoard := make(Board, len(b))
 	for i, row := range b {
+		oldBoard[i] = make([]bool, len(b))
 		for j, cell := range row {
+			oldBoard[i][j] = cell
+		}
+	}
+	for i, row := range oldBoard {
+		for j, cell := range row {
+			adj_alife := oldBoard.CountAdjacentCells(i, j, true)
 			if cell {
-				adj_alife := b.CountAdjacentCells(i, j, true)
-				if adj_alife == 2 || adj_alife == 3 {
-					newBoard[i][j] = true
-				}
+				b[i][j] = adj_alife == 2 || adj_alife == 3
 			} else {
-				adj_alife := b.CountAdjacentCells(i, j, true)
-				if adj_alife == 3 {
-					newBoard[i][j] = true
-				}
+				b[i][j] = adj_alife == 3
 			}
 		}
 	}
-	for i, row := range newBoard {
-		for j, cell := range row {
-			b[i][j] = cell
-		}
-	}
-
 }
 
 // Counts the number of adjacent cells with the given state.
