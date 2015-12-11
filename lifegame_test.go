@@ -28,9 +28,7 @@ func TestStillLifes(t *testing.T) {
 
 	for _, geometry := range geometries {
 		board := New(8)
-		for _, coord := range geometry {
-			board.SetAt(coord, true)
-		}
+		board.AddGeometry(geometry)
 		board.Tick()
 
 		for _, coord := range geometry {

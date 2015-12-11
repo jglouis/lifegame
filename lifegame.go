@@ -30,6 +30,13 @@ func (b Board) GetAt(c Coord) bool {
 	return b[c.X][c.Y]
 }
 
+// AddGeometry adds a given geometry to the board
+func (b Board) AddGeometry(geom Geometry) {
+	for _, coord := range geom {
+		b.SetAt(coord, true)
+	}
+}
+
 // Get a string representation of the Board state.
 func (b Board) String() string {
 	str := ""
