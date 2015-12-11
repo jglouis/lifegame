@@ -5,8 +5,8 @@ type Coord struct {
 	X, Y int
 }
 
-// Geometry is a slice of Coord.
-type Geometry []Coord
+// Pattern is a slice of Coord.
+type Pattern []Coord
 
 // Board is a two dimensional boolean grid.
 type Board [][]bool
@@ -30,11 +30,20 @@ func (b Board) GetAt(c Coord) bool {
 	return b[c.X][c.Y]
 }
 
-// AddGeometry adds a given geometry to the board
-func (b Board) AddGeometry(geom Geometry) {
-	for _, coord := range geom {
+// AddGeometry adds a given geometry to the board.
+// Returns false if the geometry doesn't fit on the board.
+func (b Board) AddGeometry(pattern Pattern) bool {
+	// first check if the geometry can be added to the board
+	for _, coord := range pattern {
+		if coord.X > len(b)-1 || coord.Y > len(b)-1 {
+			return false
+		}
+	}
+
+	for _, coord := range pattern {
 		b.SetAt(coord, true)
 	}
+	return true
 }
 
 // Get a string representation of the Board state.

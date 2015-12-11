@@ -18,22 +18,28 @@ func TestBlinker(t *testing.T) {
 }
 
 func TestStillLifes(t *testing.T) {
-	// Still geometries
-	block := Geometry{Coord{1, 1}, Coord{1, 2}, Coord{2, 1}, Coord{2, 2}}
-	beehive := Geometry{Coord{1, 2}, Coord{1, 3}, Coord{2, 1}, Coord{2, 4}, Coord{3, 2}, Coord{3, 3}}
-	loaf := Geometry{Coord{1, 2}, Coord{1, 3}, Coord{2, 1}, Coord{2, 4}, Coord{3, 2}, Coord{3, 4}, Coord{4, 3}}
-	boat := Geometry{Coord{1, 1}, Coord{1, 2}, Coord{2, 1}, Coord{2, 3}, Coord{3, 2}}
+	// Still patterns
+	block := Pattern{Coord{1, 1}, Coord{1, 2}, Coord{2, 1}, Coord{2, 2}}
+	beehive := Pattern{Coord{1, 2}, Coord{1, 3}, Coord{2, 1}, Coord{2, 4}, Coord{3, 2}, Coord{3, 3}}
+	loaf := Pattern{Coord{1, 2}, Coord{1, 3}, Coord{2, 1}, Coord{2, 4}, Coord{3, 2}, Coord{3, 4}, Coord{4, 3}}
+	boat := Pattern{Coord{1, 1}, Coord{1, 2}, Coord{2, 1}, Coord{2, 3}, Coord{3, 2}}
 
-	geometries := []Geometry{block, beehive, loaf, boat}
+	patterns := map[string]Pattern{
+		"block":   block,
+		"beehive": beehive,
+		"loaf":    loaf,
+		"boat":    boat}
 
-	for _, geometry := range geometries {
-		board := New(8)
-		board.AddGeometry(geometry)
+	for name, geometry := range patterns {
+		board := New(5)
+		if !board.AddGeometry(geometry) {
+			t.Fatal("Board is to small for the", name, "pattern.")
+		}
 		board.Tick()
 
 		for _, coord := range geometry {
 			if !board.GetAt(coord) {
-				t.Error("Expected board[", coord.X, "][", coord.Y, "] to be true, got false")
+				t.Error("Expected board[", coord.X, "][", coord.Y, "] to be true, got false.")
 			}
 		}
 
