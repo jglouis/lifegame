@@ -17,38 +17,41 @@ func NewPattern(coords ...Coord) Pattern {
 	return p
 }
 
-// Board is a two dimensional squared boolean grid.
-type Board [][]bool
+// Board is a two dimensional boolean grid.
+type Board map[Coord]bool
 
 // New creates a new zeroed instance of board.
-func New(size int) Board {
-	b := make(Board, size)
-	for i := range b {
-		b[i] = make([]bool, size)
-	}
-	return b
+func New() Board {
+	return make(Board)
 }
 
 // Set the Board cell at the given coordinates.
 func (b Board) SetAt(c Coord, toSet bool) {
-	b[c.X][c.Y] = toSet
+	b[c] = toSet
+	// Also sets the adjacents coordinates
+	x := c.X
+	y := c.Y
+	for i := x - 1; i <= x+1; i++ {
+		for j := y - 1; j <= y+1; j++ {
+			if x == i && y == j {
+				continue
+			}
+			coordAdj := Coord{i, j}
+			b[coordAdj] = b.GetAt(coordAdj)
+		}
+	}
+
 }
 
 // Get the cell state at given coordinates.
 func (b Board) GetAt(c Coord) bool {
-	return b[c.X][c.Y]
+	value, ok := b[c]
+	return ok && value
 }
 
 // AddGeometry adds a given geometry to the board.
 // Returns false if the geometry doesn't fit on the board.
 func (b Board) AddGeometry(pattern Pattern) bool {
-	// first check if the geometry can be added to the board
-	for coord := range pattern {
-		if coord.X > len(b)-1 || coord.Y > len(b)-1 {
-			return false
-		}
-	}
-
 	for coord := range pattern {
 		b.SetAt(coord, true)
 	}
@@ -57,55 +60,49 @@ func (b Board) AddGeometry(pattern Pattern) bool {
 
 // Get a string representation of the Board state.
 func (b Board) String() string {
+
 	str := ""
-	for _, row := range b {
-		for _, cell := range row {
-			if cell {
-				str += "1"
-			} else {
-				str += "0"
-			}
-		}
-		str += "\n"
-	}
+	// for _, row := range b {
+	// 	for _, cell := range row {
+	// 		if cell {
+	// 			str += "1"
+	// 		} else {
+	// 			str += "0"
+	// 		}
+	// 	}
+	// 	str += "\n"
+	// }
 	return str
 }
 
 // Tick computes the next state of the game of life.
 func (b Board) Tick() {
 	// Copy the old state.
-	oldBoard := make(Board, len(b))
-	for i, row := range b {
-		oldBoard[i] = make([]bool, len(b))
-		for j, cell := range row {
-			oldBoard[i][j] = cell
+	oldBoard := New()
+	for k, v := range b {
+		oldBoard[k] = v
+	}
+
+	for coord, cell := range b {
+		adj_alife := oldBoard.CountAdjacentCells(coord.X, coord.Y, true)
+		if cell {
+			b.SetAt(coord, adj_alife == 2 || adj_alife == 3)
+		} else {
+			b.SetAt(coord, adj_alife == 3)
 		}
 	}
-	for i, row := range oldBoard {
-		for j, cell := range row {
-			adj_alife := oldBoard.CountAdjacentCells(i, j, true)
-			if cell {
-				b[i][j] = adj_alife == 2 || adj_alife == 3
-			} else {
-				b[i][j] = adj_alife == 3
-			}
-		}
-	}
+
 }
 
 // Counts the number of adjacent cells with the given state.
 func (b Board) CountAdjacentCells(x, y int, state bool) int {
-	size := len(b)
 	count := 0
 	for i := x - 1; i <= x+1; i++ {
 		for j := y - 1; j <= y+1; j++ {
 			if x == i && y == j {
 				continue
 			}
-			if i < 0 || j < 0 || i > size-1 || j > size-1 {
-				continue
-			}
-			if b[i][j] == state {
+			if b.GetAt(Coord{i, j}) == state {
 				count++
 			}
 

@@ -17,7 +17,7 @@ func TestOscillators(t *testing.T) {
 		"beacon":  2}
 
 	for name, pattern := range patterns {
-		board := New(4)
+		board := New()
 		if !board.AddGeometry(pattern) {
 			t.Error("Board is to small for the", name, "pattern.")
 			continue
@@ -53,7 +53,7 @@ func TestStillLifes(t *testing.T) {
 		"boat":    boat}
 
 	for name, pattern := range patterns {
-		board := New(4)
+		board := New()
 		if !board.AddGeometry(pattern) {
 			t.Error("Board is to small for the", name, "pattern.")
 			continue
