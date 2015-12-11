@@ -60,18 +60,34 @@ func (b Board) AddGeometry(pattern Pattern) bool {
 
 // Get a string representation of the Board state.
 func (b Board) String() string {
+	// Get the current boundaries of the map.
+	var minX, minY, maxX, maxY int
+	for coord := range b {
+		if coord.X < minX {
+			minX = coord.X
+		}
+		if coord.Y < minY {
+			minY = coord.Y
+		}
+		if coord.X > maxX {
+			maxX = coord.X
+		}
+		if coord.Y > maxY {
+			maxY = coord.Y
+		}
+	}
 
 	str := ""
-	// for _, row := range b {
-	// 	for _, cell := range row {
-	// 		if cell {
-	// 			str += "1"
-	// 		} else {
-	// 			str += "0"
-	// 		}
-	// 	}
-	// 	str += "\n"
-	// }
+	for i := minX; i <= maxX; i++ {
+		for j := minY; j <= maxY; j++ {
+			if b.GetAt(Coord{i, j}) {
+				str += "1"
+			} else {
+				str += "0"
+			}
+		}
+		str += "\n"
+	}
 	return str
 }
 

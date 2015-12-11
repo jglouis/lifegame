@@ -4,7 +4,7 @@ import "testing"
 
 func TestOscillators(t *testing.T) {
 	// Oscillators patterns
-	blinker := NewPattern(Coord{1, 0}, Coord{1, 1}, Coord{1, 2})
+	blinker := NewPattern(Coord{0, 0}, Coord{0, 1}, Coord{0, 2})
 	toad := NewPattern(Coord{1, 1}, Coord{1, 2}, Coord{1, 3}, Coord{2, 0}, Coord{2, 1}, Coord{2, 2})
 	beacon := NewPattern(Coord{0, 0}, Coord{1, 0}, Coord{0, 1}, Coord{2, 3}, Coord{3, 2}, Coord{3, 3})
 	patterns := map[string]Pattern{
