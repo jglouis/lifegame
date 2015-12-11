@@ -1,11 +1,17 @@
 package lifegame
 
+// Coord X Y
 type Coord struct {
 	X, Y int
 }
 
+// Geometry is a slice of Coord.
+type Geometry []Coord
+
+// Board is a two dimensional boolean grid.
 type Board [][]bool
 
+// New creates a new zeroed instance of board.
 func New(size int) Board {
 	b := make(Board, size)
 	for i := range b {
@@ -14,14 +20,17 @@ func New(size int) Board {
 	return b
 }
 
+// Set the Board cell at the given coordinates.
 func (b Board) SetAt(c Coord, toSet bool) {
 	b[c.X][c.Y] = toSet
 }
 
+// Get the cell state at given coordinates.
 func (b Board) GetAt(c Coord) bool {
 	return b[c.X][c.Y]
 }
 
+// Get a string representation of the Board state.
 func (b Board) String() string {
 	str := ""
 	for _, row := range b {
@@ -37,7 +46,7 @@ func (b Board) String() string {
 	return str
 }
 
-// One tick of game of life
+// Tick computes the next state of the game of life.
 func (b Board) Tick() {
 	// for each cell:
 	newBoard := New(len(b))
@@ -47,10 +56,6 @@ func (b Board) Tick() {
 				adj_alife := b.CountAdjacentCells(i, j, true)
 				if adj_alife == 2 || adj_alife == 3 {
 					newBoard[i][j] = true
-				} else {
-					{
-						newBoard[i][j] = false
-					}
 				}
 			} else {
 				adj_alife := b.CountAdjacentCells(i, j, true)
@@ -68,7 +73,8 @@ func (b Board) Tick() {
 
 }
 
-func (b Board) CountAdjacentCells(x, y int, isActive bool) int {
+// Counts the number of adjacent cells with the given state.
+func (b Board) CountAdjacentCells(x, y int, state bool) int {
 	size := len(b)
 	count := 0
 	for i := x - 1; i <= x+1; i++ {
@@ -79,7 +85,7 @@ func (b Board) CountAdjacentCells(x, y int, isActive bool) int {
 			if i < 0 || j < 0 || i > size-1 || j > size-1 {
 				continue
 			}
-			if b[i][j] == isActive {
+			if b[i][j] == state {
 				count++
 			}
 

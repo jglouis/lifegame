@@ -19,10 +19,12 @@ func TestBlinker(t *testing.T) {
 
 func TestStillLifes(t *testing.T) {
 	// Still geometries
-	block := []Coord{Coord{1, 1}, Coord{1, 2}, Coord{2, 1}, Coord{2, 2}}
-	beehive := []Coord{Coord{1, 2}, Coord{1, 3}, Coord{2, 1}, Coord{2, 4}, Coord{3, 2}, Coord{3, 3}}
+	block := Geometry{Coord{1, 1}, Coord{1, 2}, Coord{2, 1}, Coord{2, 2}}
+	beehive := Geometry{Coord{1, 2}, Coord{1, 3}, Coord{2, 1}, Coord{2, 4}, Coord{3, 2}, Coord{3, 3}}
+	loaf := Geometry{Coord{1, 2}, Coord{1, 3}, Coord{2, 1}, Coord{2, 4}, Coord{3, 2}, Coord{3, 4}, Coord{4, 3}}
+	boat := Geometry{Coord{1, 1}, Coord{1, 2}, Coord{2, 1}, Coord{2, 3}, Coord{3, 2}}
 
-	geometries := [][]Coord{block, beehive}
+	geometries := []Geometry{block, beehive, loaf, boat}
 
 	for _, geometry := range geometries {
 		board := New(8)
