@@ -5,8 +5,17 @@ type Coord struct {
 	X, Y int
 }
 
-// Pattern is a slice of Coord.
-type Pattern []Coord
+// Pattern is a set of Coord.
+type Pattern map[Coord]struct{}
+
+// NewPattern creates a pattern.
+func NewPattern(coords ...Coord) Pattern {
+	p := Pattern{}
+	for _, coord := range coords {
+		p[coord] = struct{}{}
+	}
+	return p
+}
 
 // Board is a two dimensional squared boolean grid.
 type Board [][]bool
@@ -34,13 +43,13 @@ func (b Board) GetAt(c Coord) bool {
 // Returns false if the geometry doesn't fit on the board.
 func (b Board) AddGeometry(pattern Pattern) bool {
 	// first check if the geometry can be added to the board
-	for _, coord := range pattern {
+	for coord := range pattern {
 		if coord.X > len(b)-1 || coord.Y > len(b)-1 {
 			return false
 		}
 	}
 
-	for _, coord := range pattern {
+	for coord := range pattern {
 		b.SetAt(coord, true)
 	}
 	return true

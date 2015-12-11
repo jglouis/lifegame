@@ -2,11 +2,11 @@ package lifegame
 
 import "testing"
 
-func TestBlinker(t *testing.T) {
+func TestOscillator(t *testing.T) {
 	// Oscillators patterns
-	blinker := Pattern{Coord{1, 0}, Coord{1, 1}, Coord{1, 2}}
-	toad := Pattern{Coord{1, 1}, Coord{1, 2}, Coord{1, 3}, Coord{2, 0}, Coord{2, 1}, Coord{2, 2}}
-	beacon := Pattern{Coord{0, 0}, Coord{1, 0}, Coord{0, 1}, Coord{2, 3}, Coord{3, 2}, Coord{3, 3}}
+	blinker := NewPattern(Coord{1, 0}, Coord{1, 1}, Coord{1, 2})
+	toad := NewPattern(Coord{1, 1}, Coord{1, 2}, Coord{1, 3}, Coord{2, 0}, Coord{2, 1}, Coord{2, 2})
+	beacon := NewPattern(Coord{0, 0}, Coord{1, 0}, Coord{0, 1}, Coord{2, 3}, Coord{3, 2}, Coord{3, 3})
 	patterns := map[string]Pattern{
 		"blinker": blinker,
 		"toad":    toad,
@@ -16,9 +16,9 @@ func TestBlinker(t *testing.T) {
 		"toad":    2,
 		"beacon":  2}
 
-	for name, geometry := range patterns {
+	for name, pattern := range patterns {
 		board := New(4)
-		if !board.AddGeometry(geometry) {
+		if !board.AddGeometry(pattern) {
 			t.Error("Board is to small for the", name, "pattern.")
 			continue
 		}
@@ -27,9 +27,13 @@ func TestBlinker(t *testing.T) {
 			board.Tick()
 		}
 
-		for _, coord := range geometry {
-			if !board.GetAt(coord) {
-				t.Error("Expected board[", coord.X, "][", coord.Y, "] to be true, got false.")
+		for i := 0; i < len(board); i++ {
+			for j := 0; j < len(board); j++ {
+				coord := Coord{i, j}
+				_, ok := pattern[coord]
+				if ok != board.GetAt(coord) {
+					t.Error("Expected board[", coord.X, "][", coord.Y, "] to be", ok, "for pattern", name, ", got", !ok, ".")
+				}
 			}
 		}
 	}
@@ -37,10 +41,10 @@ func TestBlinker(t *testing.T) {
 
 func TestStillLifes(t *testing.T) {
 	// Still patterns
-	block := Pattern{Coord{1, 1}, Coord{0, 0}, Coord{0, 1}, Coord{1, 0}}
-	beehive := Pattern{Coord{0, 1}, Coord{0, 2}, Coord{1, 0}, Coord{1, 3}, Coord{2, 1}, Coord{2, 2}}
-	loaf := Pattern{Coord{0, 1}, Coord{0, 2}, Coord{1, 0}, Coord{1, 3}, Coord{2, 1}, Coord{2, 3}, Coord{3, 2}}
-	boat := Pattern{Coord{0, 0}, Coord{0, 1}, Coord{1, 0}, Coord{1, 2}, Coord{2, 1}}
+	block := NewPattern(Coord{1, 1}, Coord{0, 0}, Coord{0, 1}, Coord{1, 0})
+	beehive := NewPattern(Coord{0, 1}, Coord{0, 2}, Coord{1, 0}, Coord{1, 3}, Coord{2, 1}, Coord{2, 2})
+	loaf := NewPattern(Coord{0, 1}, Coord{0, 2}, Coord{1, 0}, Coord{1, 3}, Coord{2, 1}, Coord{2, 3}, Coord{3, 2})
+	boat := NewPattern(Coord{0, 0}, Coord{0, 1}, Coord{1, 0}, Coord{1, 2}, Coord{2, 1})
 
 	patterns := map[string]Pattern{
 		"block":   block,
@@ -48,17 +52,21 @@ func TestStillLifes(t *testing.T) {
 		"loaf":    loaf,
 		"boat":    boat}
 
-	for name, geometry := range patterns {
+	for name, pattern := range patterns {
 		board := New(4)
-		if !board.AddGeometry(geometry) {
+		if !board.AddGeometry(pattern) {
 			t.Error("Board is to small for the", name, "pattern.")
 			continue
 		}
 		board.Tick()
 
-		for _, coord := range geometry {
-			if !board.GetAt(coord) {
-				t.Error("Expected board[", coord.X, "][", coord.Y, "] to be true, got false.")
+		for i := 0; i < len(board); i++ {
+			for j := 0; j < len(board); j++ {
+				coord := Coord{i, j}
+				_, ok := pattern[coord]
+				if ok != board.GetAt(coord) {
+					t.Error("Expected board[", coord.X, "][", coord.Y, "] to be", ok, "for pattern", name, ", got", !ok, ".")
+				}
 			}
 		}
 
