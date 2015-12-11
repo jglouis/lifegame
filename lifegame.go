@@ -1,13 +1,25 @@
 package lifegame
 
+type Coord struct {
+	X, Y int
+}
+
 type Board [][]bool
 
-func New(size uint) Board {
+func New(size int) Board {
 	b := make(Board, size)
 	for i := range b {
 		b[i] = make([]bool, size)
 	}
 	return b
+}
+
+func (b Board) SetAt(c Coord, toSet bool) {
+	b[c.X][c.Y] = toSet
+}
+
+func (b Board) GetAt(c Coord) bool {
+	return b[c.X][c.Y]
 }
 
 func (b Board) String() string {
@@ -28,7 +40,7 @@ func (b Board) String() string {
 // One tick of game of life
 func (b Board) Tick() {
 	// for each cell:
-	newBoard := New(3)
+	newBoard := New(len(b))
 	for i, row := range b {
 		for j, cell := range row {
 			if cell {
