@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package lifegame
 
 type Board [][]bool
 
@@ -27,7 +25,7 @@ func (b Board) String() string {
 	return str
 }
 
-// One tick og game of life
+// One tick of game of life
 func (b Board) Tick() {
 	// for each cell:
 	newBoard := New(3)
@@ -76,20 +74,4 @@ func (b Board) CountAdjacentCells(x, y int, isActive bool) int {
 		}
 	}
 	return count
-}
-
-func main() {
-	b := New(3)
-	b[1][0] = true
-	b[1][1] = true
-	b[1][2] = true
-
-	fmt.Println(b)
-	b.Tick()
-	fmt.Println(b)
-	b.Tick()
-	fmt.Println(b)
-	b.Tick()
-	fmt.Println(b)
-
 }
